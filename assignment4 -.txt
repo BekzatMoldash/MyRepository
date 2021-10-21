@@ -1,0 +1,47 @@
+P01.A  
+SELECT first_name , last_name FROM Customers;
+INTERSECT
+SELECT first_name , last_name FROM  Staff;
+
+
+P01.B 
+SELECT first_name,last_name FROM Staff 
+EXCEPT 
+SELECT first_name,last_name FROM customer;   
+
+
+P01.C  
+SELECT first_name, last_name FROM Customer 
+UNION
+SELECT first_name,last_name  FROM Staff; 
+
+Problem 02
+P02.A
+SELECT weekday, count(countsofweek) as count,avg(countsofweek) as average,max(countsofweek) as max,min(countsofweek) as min 
+      FROM 
+      (select strftime('%w',rental_date) as weekday, COUNT(date(rental_date)) as countsofweek 
+      from rental 
+      group by date(rental_date))  
+      group by weekday; 
+      
+P02.B
+SELECT first_name, last_name FROM customer
+UNION
+SELECT first_name, last_name FROM Staff 
+ORDER by first_name;
+
+Problem 03
+P03.A
+SELECT film.film_id, film.title, film.description  FROM film 
+JOIN film_category 
+ON film.film_id = film_category.film_id 
+JOIN category
+ON film_category.category_id = category.category_id   
+WHERE category.name = 'Comedy'; 
+
+P03.B
+SELECT film.film_id,film.title, film.description  
+FROM film 
+JOIN film_actor ON film.film_id = film_actor.film_id
+JOIN actor ON film_actor.actor_id = actor.actor_id   
+WHERE actor.first_name like '%Julia%';
