@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?><sqlb_project><db path="C:/Users/Professional/OneDrive/Документы/Bank.db" readonly="0" foreign_keys="1" case_sensitive_like="0" temp_store="0" wal_autocheckpoint="1000" synchronous="2"/><attached/><window><main_tabs open="structure pragmas browser query" current="3"/></window><tab_structure><column_width id="0" width="300"/><column_width id="1" width="0"/><column_width id="2" width="100"/><column_width id="3" width="1186"/><column_width id="4" width="0"/><expanded_item id="0" parent="1"/><expanded_item id="1" parent="1"/><expanded_item id="2" parent="1"/><expanded_item id="3" parent="1"/></tab_structure><tab_browse><current_table name="4,8:mainAccounts"/><default_encoding codec=""/><browse_table_settings><table schema="main" name="Accounts" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort><column index="3" mode="1"/></sort><column_widths><column index="1" value="81"/><column index="2" value="51"/><column index="3" value="56"/><column index="4" value="86"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="Companies" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort/><column_widths><column index="1" value="86"/><column index="2" value="68"/><column index="3" value="60"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="SuspiciousTransactions" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort><column index="1" mode="1"/></sort><column_widths><column index="1" value="103"/><column index="2" value="117"/><column index="3" value="101"/><column index="4" value="98"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="Transactions" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort><column index="4" mode="0"/></sort><column_widths><column index="1" value="103"/><column index="2" value="117"/><column index="3" value="101"/><column index="4" value="129"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="Users" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort/><column_widths><column index="1" value="56"/><column index="2" value="78"/><column index="3" value="75"/><column index="4" value="54"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table></browse_table_settings></tab_browse><tab_sql><sql name="SQL 1">--P01.A 
+
+-- insert into users(first_name, last_name) 
+-- values ('first_name', 'last_name');
+
+--P01.B 
+
+-- insert into users(first_name, last_name) 
+-- values ('Cristiano', 'Ronaldo'), ('Leo', 'Messi'), ('Luis ', 'Suarez'), ('Killian', 'Mbapppe'), ('Nurlan', 'Saburov'); 
+ 
+-- P01.C 
+
+-- delete from SuspiciousTransactions 
+-- where from_account_id = 8; 
+
+-- P01.D 
+
+-- update users set first_name= 'Mike' , last_name = 'Jordan'
+-- where user_id = 7; 
+
+-- P01.E  
+
+-- update users set gender = 'M' 
+-- where first_name like '%a' ;
+
+-- P02.A 
+
+-- insert into SuspiciousTransactions select * from Transactions 
+-- where performed_at like '2021-04%'; 
+
+-- P02.B 
+
+-- delete from Transactions 
+-- where Transaction_id IN  
+-- (SELECT Transaction_id from Transactions 
+-- order by Transaction_id desc 
+-- limit 3) 
+
+ 
+-- P02.C 
+
+-- update Accounts set Money = Money - 10
+-- where user_id not null; 
+
+
+-- P02.D 
+
+-- insert or replace into Companies (Title, Country)
+-- values ('Google', 'USA'),  ('Jayo', 'Russia'), ('Yandex', 'Russia'), ('Roombo', 'Poland'); 
+
+-- P03.A 
+
+begin TRANSACTION;
+insert into Accounts(Account_id, Money) values (9999, 2); 
+insert into Transactions(Transaction_id, from_account_id, to_account_id) values (101, 1, 2); 
+update Accounts set Money = Money - 102 where Account_id=1; 
+update Accounts set Money = Money + 100 where Account_id=2; 
+COMMIT; 
+ 
+-- P03.B 
+
+begin TRANSACTION; 
+update Accounts set Money = Money * 1.07 where Money &lt; 0; 
+update Accounts set Money = Money * 1.2 where Money &gt; 0; 
+COMMIT; 
+ 
+-- P03.C 
+
+begin TRANSACTION; 
+update Companies set country='Russia' where title like '%b%'; 
+insert into SuspiciousTransactions select t.Transaction_id, t.from_account_id, t.to_account_id, t.performed_at from Transactions t join Accounts a join Companies c on t.to_account_id=a.Account_id and a.Company_id=c.Company_id where country='Russia'; 
+delete from Transactions where Transaction_id in 
+(select t.Transaction_id from Transactions t join Accounts a join Companies c on t.to_account_id=a.Account_id and a.Company_id=c.Company_id where country='Russia');  
+COMMIT;</sql><current_tab id="0"/></tab_sql></sqlb_project>
